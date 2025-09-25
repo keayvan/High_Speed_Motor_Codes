@@ -1,0 +1,7 @@
+Test: 2 wires to 1 wire
+Frequency range: 4 to 2000 HZ
+Number of points: 200
+Test Signal: Current
+Source Impedance: Low Z 10 Ohm
+Cable length: 1m
+Measurment Speed: 100 ms 
