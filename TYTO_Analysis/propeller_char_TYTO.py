@@ -64,8 +64,16 @@ for x, y in zip(avg_df.iloc[:,5],avg_df.iloc[:,2]):
 
 
 
+# zero_row = pd.DataFrame(
+#     {
+#         "Powertrain 1 - ESC throttle (μs)": [1150,2000],
+#         "Powertrain 1 - rotation speed (rpm)": [0,18000]
+#     }
+# )
 
 df_th_rs = avg_df[['Powertrain 1 - ESC throttle (μs)','Powertrain 1 - rotation speed (rpm)']]
+# df_th_rs = pd.concat([zero_row, df_th_rs], ignore_index=True)
+
 deg = 2
 coeffs = np.polyfit(df_th_rs["Powertrain 1 - ESC throttle (μs)"], df_th_rs["Powertrain 1 - rotation speed (rpm)"], deg)
 poly = np.poly1d(coeffs)
