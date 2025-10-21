@@ -11,7 +11,7 @@ import glob
 import numpy as np
 from sklearn.metrics import r2_score
 
-proj_name = 'prpeller_char'
+proj_name = 'propeller_charV2'
 files = glob.glob(f"./Results_TYTO/{proj_name}/*.csv")
 
 
@@ -94,3 +94,28 @@ plt.ylabel("Rotation Speed (rpm)")
 plt.legend()
 plt.grid(True)
 plt.show()
+
+rho = 1.2
+d_propeller = 25.5/100
+p_propeller = 2*np.pi*(avg_df['Powertrain 1 - rotation speed (rpm)']/60)*avg_df['Powertrain 1 - torque MZ (torque) (N⋅m)']
+CT = avg_df['Powertrain 1 - force Fz (thrust) (N)']/(rho*(avg_df['Powertrain 1 - rotation speed (rpm)']/60)**2*d_propeller**4)
+CP = avg_df[ 'Powertrain 1 - mechanical power (W)']/(rho*(avg_df['Powertrain 1 - rotation speed (rpm)']/60)**3*d_propeller**5)
+
+fig,ax = plt.subplots(1,4, figsize = (20,5))
+ax[0].plot(avg_df[ 'Powertrain 1 - rotation speed (rpm)'],CT,'-o')
+ax[0].set_xlabel('Rotational Speed (RPM)')
+ax[0].set_ylabel('Thrust coefficient ($C_T$)')
+
+
+ax[1].plot(avg_df[ 'Powertrain 1 - rotation speed (rpm)'],CP,'-o')
+ax[1].set_xlabel('Rotational Speed (RPM)')
+ax[1].set_ylabel('Power coefficient ($C_P$)')
+
+
+
+J = 0.8
+ax[2].plot(avg_df[ 'Powertrain 1 - rotation speed (rpm)'],avg_df['Powertrain 1 - force Fz (thrust) (N)']/avg_df[ 'Powertrain 1 - mechanical power (W)'],'-o')
+ax[2].set_xlabel('Rotational Speed (RPM)')
+ax[2].set_ylabel('Propeller efficiency ( ($\eta$)')
+
+ax[3].plot(avg_df[ 'Powertrain 1 - rotation speed (rpm)'],avg_df['Powertrain 1 - propeller efficiency (N/W)'],'-o')

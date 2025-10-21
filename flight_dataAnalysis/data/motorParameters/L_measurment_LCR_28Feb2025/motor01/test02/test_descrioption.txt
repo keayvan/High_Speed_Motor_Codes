@@ -1,0 +1,7 @@
+Frequency range min: 4 HZ
+Frequency range max: 2000 HZ
+Number of points: 200
+Test Signal: Current
+Source Impedance: Low Z 10 Ohm
+Cable length: 1 m
+Measurment Speed: 15 ms 
