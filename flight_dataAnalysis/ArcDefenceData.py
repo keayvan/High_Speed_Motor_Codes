@@ -153,11 +153,11 @@ if __name__=="__main__":
 
     df_time = df_throttle.copy()
     df_time.index = pd.to_timedelta(df_time["Time (s)"], unit="s")
-    nearest_df = df_time.resample("1S").nearest()
-    nearest_df.to_csv(f"{fldr_save}throttle_nearest.csv", index=False)
+    nearest_df = df_time.resample("0.001S").nearest()
+    # nearest_df.to_csv(f"{fldr_save}throttle_nearest.csv", index=False)
 
     mean_df    = df_time.resample("1S").mean(numeric_only=True)  
-    mean_df.to_csv(f"{fldr_save}throttle_mean.csv", index=False)
+    # mean_df.to_csv(f"{fldr_save}throttle_mean.csv", index=False)
     
     interp_df = (
         df_time.select_dtypes(include="number")

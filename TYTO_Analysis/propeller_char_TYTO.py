@@ -11,7 +11,7 @@ import glob
 import numpy as np
 from sklearn.metrics import r2_score
 
-proj_name = 'propeller_charV2'
+proj_name = 'propeller_char'
 files = glob.glob(f"./Results_TYTO/{proj_name}/*.csv")
 
 
