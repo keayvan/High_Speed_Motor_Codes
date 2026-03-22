@@ -10,6 +10,7 @@ import pandas as pd
 import function
 from matplotlib import pyplot as plt
 import re
+import numpy as np
 
 def to_seconds(time_str):
     minutes = seconds = milliseconds = 0
@@ -59,7 +60,11 @@ def readArc_csv(filename, cols=None, test = 'flight'):
 
     return df, df_sorted
 
+def expo_inverse(z, a, b, c):
+        return (1 / b) * np.log((z - c) / a)
 if __name__=="__main__":
+    plt.rcParams["font.family"] = "Century Gothic"
+
     filename = "Telem ESC 01_2025.csv"
     # filename = "prueba 4.csv"
 
@@ -127,16 +132,35 @@ if __name__=="__main__":
     axes21[0].legend()
 
     
-    range_min = 1200
-    range_max = 1400
-    df_Arc["Powertrain 1 ESC throttle - target (μs)"] = df_Arc["Input request (%)"]*(range_max-range_min)/100+range_min
-    parmPlot = ["Input request (%)", "Powertrain 1 ESC throttle - target (μs)"]  
+    range_min = 1000
+    range_max = 2000
+    scaled_param = df_Arc["SPEED (rpm)"]
+    df_Arc["Powertrain 1 ESC throttle - target (μs)_scaled"] =scaled_param *(range_max-range_min)/(scaled_param.max()-scaled_param.min())+range_min
+    
+    df_Arc["Powertrain 1 ESC throttle - target (μs)"] = (scaled_param+scaled_param.max())/scaled_param.max()*1000
+    
+    scaled_param1 = df_Arc['Input request (%)']
+    df_Arc["Powertrain 1 ESC throttle - target (μs)_request"] =scaled_param1 *(range_max-range_min)/(scaled_param1.max()-scaled_param1.min())+range_min
+
+    
+    parmPlot = ["Input request (%)", "Powertrain 1 ESC throttle - target (μs)","SPEED (rpm)"]  
+    
+    plt.figure()
+    plt.plot(df_Arc['Time (s)'],df_Arc["Powertrain 1 ESC throttle - target (μs)"], 'red', label = 'ARC R&D')
+    # plt.plot(df_Arc['Time (s)'],df_Arc["Powertrain 1 ESC throttle - target (μs)_scaled"], 'blue', label = 'ARC R&D scaled')
+    plt.plot(df_Arc['Time (s)'],df_Arc["Powertrain 1 ESC throttle - target (μs)_request"],'gray', label= 'MGM ')
+    plt.legend()
+    plt.grid(True)
+    plt.xlabel('Time (s)')
+    plt.ylabel('ESC Throttle Input(μs)')
+
+   
     function.plotData(df= df_Arc,
                  x_parm = 'Time (s)',
                  y_parms= parmPlot,
                  n_rows = 1,
                  title = 'Throttle (%)',
-                 plot_type='dot')
+                 plot_type='line')
     
     print('***************************************')
     print(f'mean_Throttle ={df_Arc["Powertrain 1 ESC throttle - target (μs)"].mean()}')
@@ -149,7 +173,7 @@ if __name__=="__main__":
     df_throttle = df_throttle[["Time (s)", "Take sample", "Powertrain 1 ESC throttle - target (μs)"]]
 
     fldr_save = './data/resultsArcDef/'
-    # df_throtttle.to_csv(f"{fldr_save}throtthle20.csv", index=False)  # index=False avoids writing row numbers
+    df_throttle.to_csv(f"{fldr_save}throthle20.csv", index=False)  # index=False avoids writing row numbers
 
     df_time = df_throttle.copy()
     df_time.index = pd.to_timedelta(df_time["Time (s)"], unit="s")
@@ -166,7 +190,17 @@ if __name__=="__main__":
     )
     interp_df.to_csv(f"{fldr_save}throttle_linear.csv", index=False)
 
-
-
+    a= 2.5064964103154286
+    b= 0.0002449555769040284
+    c = -3.434215630385792
+   
+    plt.figure()
+    request = df_Arc_sorted['Input request (%)']
+    speed_org = df_Arc_sorted['SPEED (rpm)']
+    plt.plot(request,speed_org , '.')
     
+    throttle_predicted = expo_inverse(speed_org,a,b,c)
+    
+    plt.figure()
+    plt.plot(throttle_predicted, speed_org)
     

@@ -1,0 +1,50 @@
+{
+  "battery": {
+    "cells_s": 6,
+    "capacity_ah": 5.0,
+    "internal_resistance_mohm": 30,
+    "v_cell_nom": 3.7
+  },
+  "motor": {
+    "kv_rpm_per_v": 900,
+    "rm_ohm": 0.08,
+    "i0_a": 1.2,
+    "max_current_a": 35,
+    "max_temp_c": 90
+  },
+  "esc": {
+    "max_current_a": 40,
+    "efficiency": 0.95,
+    "has_telemetry": true
+  },
+  "props": [
+    { "name": "10x6", "diameter_in": 10, "pitch_in": 6, "ct0": 0.10, "cq0": 0.04 },
+    { "name": "11x5.5", "diameter_in": 11, "pitch_in": 5.5, "ct0": 0.105, "cq0": 0.042 }
+  ],
+  "aircraft": {
+    "mass_kg": 2.2,
+    "wing_area_m2": 0.42,
+    "cd0": 0.035,
+    "k": 0.075
+  },
+  "mission": {
+    "segments": [
+      { "name": "takeoff", "duration_s": 15, "target_airspeed_mps": 12, "required_thrust_n": 18 },
+      { "name": "climb",   "duration_s": 120, "target_airspeed_mps": 18, "required_thrust_n": 10 },
+      { "name": "cruise",  "duration_s": 900, "target_airspeed_mps": 22 },
+      { "name": "loiter",  "duration_s": 600, "target_airspeed_mps": 16 }
+    ]
+  },
+  "constraints": {
+    "max_tip_mps": 220,
+    "max_current_a": 35,
+    "max_motor_temp_c": 90,
+    "min_thrust_margin": 0.0
+  },
+  "measurement": {
+    "thrust_stand": true,
+    "rpm_measurement": true,
+    "in_flight_logging": true,
+    "notes": "Add your available measurements here"
+  }
+}
